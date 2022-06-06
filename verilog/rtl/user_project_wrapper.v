@@ -81,42 +81,32 @@ module user_project_wrapper #(
 /*--------------------------------------*/
 /* User project is instantiated  here   */
 /*--------------------------------------*/
-
-user_proj_example mprj (
+ChipTop Inst_ChipTop (
 `ifdef USE_POWER_PINS
 	.vccd1(vccd1),	// User area 1 1.8V power
 	.vssd1(vssd1),	// User area 1 digital ground
 `endif
-
-    .wb_clk_i(wb_clk_i),
-    .wb_rst_i(wb_rst_i),
-
-    // MGMT SoC Wishbone Slave
-
-    .wbs_cyc_i(wbs_cyc_i),
-    .wbs_stb_i(wbs_stb_i),
-    .wbs_we_i(wbs_we_i),
-    .wbs_sel_i(wbs_sel_i),
-    .wbs_adr_i(wbs_adr_i),
-    .wbs_dat_i(wbs_dat_i),
-    .wbs_ack_o(wbs_ack_o),
-    .wbs_dat_o(wbs_dat_o),
-
-    // Logic Analyzer
-
-    .la_data_in(la_data_in),
-    .la_data_out(la_data_out),
-    .la_oenb (la_oenb),
-
-    // IO Pads
-
-    .io_in (io_in),
-    .io_out(io_out),
-    .io_oeb(io_oeb),
-
-    // IRQ
-    .irq(user_irq)
+  .jtag_TCK(wb_clk_i),
+  .jtag_TMS(la_data_in[0]),
+  .jtag_TDI(la_data_in[1]),
+  .jtag_TDO(la_data_out[0]),
+  .serial_tl_clock(la_data_out[1]),
+  .serial_tl_bits_in_ready(la_data_out[2]),
+  .serial_tl_bits_in_valid(la_data_in[2]),
+  .serial_tl_bits_in_bits(wbs_adr_i),        //32bits
+  .serial_tl_bits_out_ready(la_data_in[3]),
+  .serial_tl_bits_out_valid(la_data_out[3]),
+  .serial_tl_bits_out_bits(wbs_dat_o),       //32bits
+  .custom_boot(la_data_in[4]),
+  .clock_clock(wb_clk_i),
+  .reset(wb_rst_i),
+  .uart_0_txd(la_data_out[4]),
+  .uart_0_rxd(la_data_in[5])
 );
+
+`ifndef VERBOSE
+  `define VERBOSE 0
+`endif
 
 endmodule	// user_project_wrapper
 
