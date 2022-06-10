@@ -81,27 +81,36 @@ module user_project_wrapper #(
 /*--------------------------------------*/
 /* User project is instantiated  here   */
 /*--------------------------------------*/
-ChipTop Inst_ChipTop (
+user_project_wrapper1 Inst_user_project_wrapper1 (
 `ifdef USE_POWER_PINS
-	.vccd1(vccd1),	// User area 1 1.8V power
-	.vssd1(vssd1),	// User area 1 digital ground
+    .vdda1(vdda1), 	// User area 1 3.3V supply
+    .vdda2(vdda2), 	// User area 2 3.3V supply
+    .vssa1(vssa1), 	// User area 1 analog ground
+    .vssa2(vssa2), 	// User area 2 analog ground
+    .vccd1(vccd1), 	// User area 1 1.8V supply
+    .vccd2(vccd2), 	// User area 2 1.8v supply
+    .vssd1(vssd1), 	// User area 1 digital ground
+    .vssd2(vssd2), 	// User area 2 digital ground
 `endif
-  .jtag_TCK(wb_clk_i),
-  .jtag_TMS(la_data_in[0]),
-  .jtag_TDI(la_data_in[1]),
-  .jtag_TDO(la_data_out[0]),
-  .serial_tl_clock(la_data_out[1]),
-  .serial_tl_bits_in_ready(la_data_out[2]),
-  .serial_tl_bits_in_valid(la_data_in[2]),
-  .serial_tl_bits_in_bits(wbs_adr_i),        //32bits
-  .serial_tl_bits_out_ready(la_data_in[3]),
-  .serial_tl_bits_out_valid(la_data_out[3]),
-  .serial_tl_bits_out_bits(wbs_dat_o),       //32bits
-  .custom_boot(la_data_in[4]),
-  .clock_clock(wb_clk_i),
-  .reset(wb_rst_i),
-  .uart_0_txd(la_data_out[4]),
-  .uart_0_rxd(la_data_in[5])
+    .wb_clk_i(wb_clk_i),
+    .wb_rst_i(wb_rst_i),
+    .wbs_stb_i(wbs_stb_i),
+    .wbs_cyc_i(wbs_cyc_i),
+    .wbs_we_i(wbs_we_i),
+    .wbs_sel_i(wbs_sel_i),
+    .wbs_dat_i(wbs_dat_i),
+    .wbs_adr_i(wbs_adr_i),
+    .wbs_ack_o(wbs_ack_o),
+    .wbs_dat_o(wbs_dat_o),
+    .la_data_in(la_data_in),
+    .la_data_out(la_data_out),
+    .la_oenb(la_oenb),
+    .io_in(io_in),
+    .io_out(io_out),
+    .io_oeb(io_oeb),
+    .analog_io(analog_io),
+    .user_clock2(user_clock2),
+    .user_irq(user_irq)
 );
 
 `ifndef VERBOSE
